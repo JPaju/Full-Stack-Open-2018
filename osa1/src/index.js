@@ -58,11 +58,40 @@ const App = () => {
 
     return(
         <div>
-            <Otsikko kurssi={kurssi}/>
-            <Sisalto osat={kurssi.osat}/>
-            <Yhteensa osat={kurssi.osat}/>
+           <div className='kurssi'>
+                <Otsikko kurssi={kurssi}/>
+                <Sisalto osat={kurssi.osat}/>
+                <Yhteensa osat={kurssi.osat}/>
+            </div>
+            
+            <div className='counter'>
+                <CounterApp interval={0.5}/>
+            </div>
         </div>
     )
+}
+
+class CounterApp extends React.Component {
+    constructor(props) {
+        super(props)
+        this.interval = props.interval * 1000 //in seconds
+        this.state = {
+            counter: 0
+        }
+        
+        setInterval(() => {
+            this.setState({counter: this.state.counter + 1})
+        }, this.interval)
+    }
+
+    render() {
+        return(
+            <div>
+                <h2>Counter, interval</h2>
+                <div>{this.state.counter}</div>
+            </div>
+        )
+    }
 }
 
 
