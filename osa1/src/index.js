@@ -74,9 +74,7 @@ const App = () => {
 class CounterApp extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            counter: 0
-        }
+        this.state = {counter: 0}
     }
 
     setCounter = (value) => () => {this.setState({counter: value})}
@@ -85,19 +83,34 @@ class CounterApp extends React.Component {
         return(
             <div>
                 <h2>Counter</h2>
-                <div>{this.state.counter}</div>
+                <div><Display counter={this.state.counter}/></div>
                 
-                <button onClick={this.setCounter(this.state.counter + 1)}>
-                    Increase
-                </button>
-
-                <button onClick={this.setCounter(0)}>
-                    Reset
-                </button>
+                <div>
+                    <Button
+                        handleClick={this.setCounter(this.state.counter + 1)}
+                        label='Increase'
+                    />
+                    <Button
+                        handleClick={this.setCounter(this.state.counter - 1)}
+                        label='Decrease'
+                    />
+                    <Button
+                        handleClick={this.setCounter(0)}
+                        label='Reset'
+                    />
+                </div>
             </div>
         )
     }
 }
 
+const Display = ({counter}) => <div>{counter}</div>
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const Button = ({handleClick, label}) => (
+    <button onClick={handleClick}>
+        {label}
+    </button>
+)
+
+
+ReactDOM.render(<CounterApp interval={0.5} />, document.getElementById('root'));
