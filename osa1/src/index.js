@@ -10,7 +10,7 @@ const Otsikko = (props) => {
 }
 
 const Sisalto = (props) => {
-    let osat = props.osat.map(osa => <Osa osa={osa}/>)
+    let osat = props.osat.map(osa => <Osa osa={osa} key={osa.nimi}/>)
 
     return(
         <div>
@@ -21,7 +21,7 @@ const Sisalto = (props) => {
     
 const Osa = (props) => {
     return(
-        <p>{props.osa.nimi}, {props.osa.tehtavia} tehtävää.</p>
+        <li>{props.osa.nimi}, {props.osa.tehtavia} tehtävää.</li>
     )
 
 }
