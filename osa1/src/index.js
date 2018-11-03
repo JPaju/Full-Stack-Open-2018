@@ -74,21 +74,26 @@ const App = () => {
 class CounterApp extends React.Component {
     constructor(props) {
         super(props)
-        this.interval = props.interval * 1000 //in seconds
         this.state = {
             counter: 0
         }
-        
-        setInterval(() => {
-            this.setState({counter: this.state.counter + 1})
-        }, this.interval)
     }
+
+    setCounter = (value) => () => {this.setState({counter: value})}
 
     render() {
         return(
             <div>
-                <h2>Counter, interval</h2>
+                <h2>Counter</h2>
                 <div>{this.state.counter}</div>
+                
+                <button onClick={this.setCounter(this.state.counter + 1)}>
+                    Increase
+                </button>
+
+                <button onClick={this.setCounter(0)}>
+                    Reset
+                </button>
             </div>
         )
     }
