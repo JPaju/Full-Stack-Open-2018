@@ -5,16 +5,16 @@ import './index.css';
 
 const Otsikko = (props) => {
     return(
-        <h1>{props.otsikko}</h1>
+        <h1>{props.kurssi.nimi}</h1>
     )
 }
 
 const Sisalto = (props) => {
+    let osat = props.osat.map(osa => <Osa osa={osa}/>)
+
     return(
         <div>
-            <Osa osa={props.osa1}/>
-            <Osa osa={props.osa2}/>
-            <Osa osa={props.osa3}/>
+            {osat}
         </div>
     )
 }
@@ -38,27 +38,30 @@ const Yhteensa = (props) => {
 }
 
 const App = () => {
-    const kurssi = 'Half Stack -sovelluskehitys'
+    const kurssi = {
+        nimi: 'Half Stack -sovelluskehitys'
+    }
     
-    const osa1 = {
-        nimi: 'Reactin perusteet',
-        tehtavia: 10
-    }
-    const osa2 = {
-        nimi :'Tiedonvälitys propseilla',
-        tehtavia: 7
-    } 
-    const osa3 = {
-        nimi: 'Komponenttien tila',
-        tehtavia: 14
-    }
-
+    const osat = [
+        {
+            nimi: 'Reactin perusteet',
+            tehtavia: 10
+        },
+        {
+            nimi :'Tiedonvälitys propseilla',
+            tehtavia: 7
+        }, 
+        {
+            nimi: 'Komponenttien tila',
+            tehtavia: 14
+        }
+    ]
 
     return(
         <div>
-            <Otsikko otsikko={kurssi}/>
-            <Sisalto osa1={osa1} osa2={osa2} osa3={osa3}/>
-            <Yhteensa osat={[osa1, osa2, osa3]}/>
+            <Otsikko kurssi={kurssi}/>
+            <Sisalto osat={osat}/>
+            <Yhteensa osat={osat}/>
         </div>
     )
 }
