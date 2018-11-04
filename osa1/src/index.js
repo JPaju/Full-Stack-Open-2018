@@ -3,95 +3,75 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-const Otsikko = (props) => {
-    return(
-        <h1>{props.kurssi.nimi}</h1>
-    )
+const App = () =>{
+            return(
+            <div>
+                <Palaute/>
+            </div>
+        )   
 }
 
-const Sisalto = (props) => {
-    let osat = props.osat.map(osa => <Osa osa={osa} key={osa.nimi}/>)
-
-    return(
-        <div>
-            {osat}
-        </div>
-    )
-}
-    
-const Osa = (props) => {
-    return(
-        <li>{props.osa.nimi}, {props.osa.tehtavia} tehtävää.</li>
-    )
-
-}
-
-const Yhteensa = (props) => {
-    let tehtavienSumma = 0;
-    props.osat.forEach(osa => {
-       tehtavienSumma += osa.tehtavia;
-   });
-
-    return(
-        <p>Tehtäviä yhteensä: {tehtavienSumma}</p>
-    )
-}
-
-const App = () => {
-    const kurssi = {
-        nimi: 'Half Stack -sovelluskehitys',
-        osat: [
-            {
-                nimi: 'Reactin perusteet',
-                tehtavia: 10
-            },
-            {
-                nimi :'Tiedonvälitys propseilla',
-                tehtavia: 7
-            }, 
-            {
-                nimi: 'Komponenttien tila',
-                tehtavia: 14
+class Palaute extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            palaute : {
+                hyvä: 0,
+                neutraali: 0,
+                huono: 0
             }
-        ]
+        }
     }
 
-    return(
-        <div>
-           <div className='kurssi'>
-                <Otsikko kurssi={kurssi}/>
-                <Sisalto osat={kurssi.osat}/>
-                <Yhteensa osat={kurssi.osat}/>
+    lisaaPalautetta = (arvo) => () => {
+        let vanhaArvo = this.state.palaute
+        vanhaArvo[arvo] = this.state.palaute[arvo] +1
+        this.setState({palaute: vanhaArvo})
+    }
+
+    render() {
+        return(
+            <div>
+                <div>
+                    <h2>Anna Palautetta</h2>
+                    <Button label='Hyvä' handleClick={this.lisaaPalautetta('hyvä')}/>
+                    <Button label='Neutraali' handleClick={this.lisaaPalautetta('neutraali')}/>
+                    <Button label='Huono' handleClick={this.lisaaPalautetta('huono')}/>
+                </div>
+                <div>
+                    <h2>Statistiikka</h2>
+                    <Display text={'Hyvä: '+ this.state.palaute.hyvä}/>
+                    <Display text={'Neutraali: '+ this.state.palaute.neutraali}/>
+                    <Display text={'Huono: '+ this.state.palaute.huono}/>
+                </div>
             </div>
-            
-            <div className='counter'>
-                <CounterApp interval={0.5}/>
-            </div>
-        </div>
-    )
+        )
+
+    }
 }
+
 
 class CounterApp extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {counter: 0}
+        this.state = {text: 0}
     }
 
-    setCounter = (value) => () => {this.setState({counter: value})}
+    setCounter = (value) => () => {this.setState({text: value})}
 
     render() {
         return(
             <div>
                 <h2>Counter</h2>
-                <div><Display counter={this.state.counter}/></div>
+                <div><Display text={this.state.text}/></div>
                 
                 <div>
                     <Button
-                        handleClick={this.setCounter(this.state.counter + 1)}
+                        handleClick={this.setCounter(this.state.text + 1)}
                         label='Increase'
                     />
                     <Button
-                        handleClick={this.setCounter(this.state.counter - 1)}
+                        handleClick={this.setCounter(this.state.text - 1)}
                         label='Decrease'
                     />
                     <Button
@@ -104,7 +84,7 @@ class CounterApp extends React.Component {
     }
 }
 
-const Display = ({counter}) => <div>{counter}</div>
+const Display = ({text}) => <div>{text}</div>
 
 const Button = ({handleClick, label}) => (
     <button onClick={handleClick}>
@@ -113,4 +93,4 @@ const Button = ({handleClick, label}) => (
 )
 
 
-ReactDOM.render(<CounterApp interval={0.5} />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
