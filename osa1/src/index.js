@@ -23,18 +23,18 @@ class Palaute extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            palaute : {
-                hyvä: 0,
-                neutraali: 0,
-                huono: 0
+            feedback : {
+                good: 0,
+                neutral: 0,
+                bad: 0
             }
         }
     }
     
-    lisaaPalautetta = (arvo) => () => {
-        let vanhaArvo = this.state.palaute
-        vanhaArvo[arvo] = this.state.palaute[arvo] +1
-        this.setState({palaute: vanhaArvo})
+    addFeedback = (value) => () => {
+        let oldValue = this.state.feedback
+        oldValue[value] = this.state.feedback[value] +1
+        this.setState({feedback: oldValue})
     }
 
     render() {
@@ -42,12 +42,12 @@ class Palaute extends React.Component {
             <div>
                 <div>
                     <h2>Anna Palautetta</h2>
-                    <Button label='Hyvä' handleClick={this.lisaaPalautetta('hyvä')}/>
-                    <Button label='Neutraali' handleClick={this.lisaaPalautetta('neutraali')}/>
-                    <Button label='Huono' handleClick={this.lisaaPalautetta('huono')}/>
+                    <Button label='Hyvä' handleClick={this.addFeedback('good')}/>
+                    <Button label='Neutraali' handleClick={this.addFeedback('neutral')}/>
+                    <Button label='Huono' handleClick={this.addFeedback('bad')}/>
                 </div>
                 <div>
-                    <Statistiikka palaute={this.state.palaute}/>
+                    <Statistics feedback={this.state.feedback}/>
                 </div>
             </div>
         )
@@ -55,40 +55,46 @@ class Palaute extends React.Component {
     }
 }
 
-class Statistiikka extends React.Component{
+class Statistics extends React.Component{
     constructor(props) {
         super(props)
-        this.palaute = props.palaute
+        this.feedback = props.feedback
     }
 
     countAverage = () => {
-        let summa = ((this.palaute.hyvä*1) + (this.palaute.huono * -1))
+        let summa = ((this.feedback.good*1) + (this.feedback.bad * -1))
         if (this.feedbackCount() === 0) {return this.feedbackCount().toFixed(1)}
         else {return (summa / this.feedbackCount()).toFixed(1)}
     }
 
     positivePercentage = () => {
         let count = (this.feedbackCount() === 0 ? 1 : this.feedbackCount())
-        return (this.palaute.hyvä/count * 100).toFixed(1)
+        return (this.feedback.good/count * 100).toFixed(1)
     }
 
     feedbackCount = () => {
-        return Object.values(this.palaute).reduce((a,b) => {return a + b})
+        return Object.values(this.feedback).reduce((a,b) => {return a + b})
     }
 
     render = () => {
         return(
         <div>
-            <h2>Statistiikka</h2>
-            <Display text={'Hyvä: '+ this.palaute.hyvä}/>
-            <Display text={'Neutraali: '+ this.palaute.neutraali}/>
-            <Display text={'Huono: '+ this.palaute.huono}/>
-            <Display text={'Keskiarvo: '+ this.countAverage()}/>
-            <Display text={'Positiivisia: '+ this.positivePercentage() + '%'}/>
+            <h2>Statistics</h2>
+            <Statistic name='Hyvä' value={this.feedback.good}/>
+            <Statistic name='Neutraali' value={this.feedback.neutral}/>
+            <Statistic name='Huono' value={this.feedback.bad}/>
+            <Statistic name='Keskiarvo' value={this.countAverage()}/>
+            <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
         </div>
         )
     }
 
 }
+
+const Statistic = ({name, value}) => (
+        <div>
+            <Display text={name + ': ' + value}/>
+        </div>
+)
 
 ReactDOM.render(<App/>, document.getElementById('root'));
