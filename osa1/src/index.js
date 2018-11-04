@@ -11,6 +11,14 @@ const App = () =>{
         )   
 }
 
+const Display = ({text}) => <div>{text}</div>
+
+const Button = ({handleClick, label}) => (
+    <button onClick={handleClick}>
+        {label}
+    </button>
+)
+
 class Palaute extends React.Component {
     constructor(props) {
         super(props)
@@ -22,7 +30,7 @@ class Palaute extends React.Component {
             }
         }
     }
-
+    
     lisaaPalautetta = (arvo) => () => {
         let vanhaArvo = this.state.palaute
         vanhaArvo[arvo] = this.state.palaute[arvo] +1
@@ -39,58 +47,48 @@ class Palaute extends React.Component {
                     <Button label='Huono' handleClick={this.lisaaPalautetta('huono')}/>
                 </div>
                 <div>
-                    <h2>Statistiikka</h2>
-                    <Display text={'Hyvä: '+ this.state.palaute.hyvä}/>
-                    <Display text={'Neutraali: '+ this.state.palaute.neutraali}/>
-                    <Display text={'Huono: '+ this.state.palaute.huono}/>
+                    <Statistiikka palaute={this.state.palaute}/>
                 </div>
             </div>
         )
-
+        
     }
 }
 
-
-class CounterApp extends React.Component {
+class Statistiikka extends React.Component{
     constructor(props) {
         super(props)
-        this.state = {text: 0}
+        this.palaute = props.palaute
     }
 
-    setCounter = (value) => () => {this.setState({text: value})}
+    countAverage = () => {
+        let summa = ((this.palaute.hyvä*1) + (this.palaute.huono * -1))
+        if (this.feedbackCount() === 0) {return this.feedbackCount().toFixed(1)}
+        else {return (summa / this.feedbackCount()).toFixed(1)}
+    }
 
-    render() {
+    positivePercentage = () => {
+        let count = (this.feedbackCount() === 0 ? 1 : this.feedbackCount())
+        return (this.palaute.hyvä/count * 100).toFixed(1)
+    }
+
+    feedbackCount = () => {
+        return Object.values(this.palaute).reduce((a,b) => {return a + b})
+    }
+
+    render = () => {
         return(
-            <div>
-                <h2>Counter</h2>
-                <div><Display text={this.state.text}/></div>
-                
-                <div>
-                    <Button
-                        handleClick={this.setCounter(this.state.text + 1)}
-                        label='Increase'
-                    />
-                    <Button
-                        handleClick={this.setCounter(this.state.text - 1)}
-                        label='Decrease'
-                    />
-                    <Button
-                        handleClick={this.setCounter(0)}
-                        label='Reset'
-                    />
-                </div>
-            </div>
+        <div>
+            <h2>Statistiikka</h2>
+            <Display text={'Hyvä: '+ this.palaute.hyvä}/>
+            <Display text={'Neutraali: '+ this.palaute.neutraali}/>
+            <Display text={'Huono: '+ this.palaute.huono}/>
+            <Display text={'Keskiarvo: '+ this.countAverage()}/>
+            <Display text={'Positiivisia: '+ this.positivePercentage() + '%'}/>
+        </div>
         )
     }
+
 }
-
-const Display = ({text}) => <div>{text}</div>
-
-const Button = ({handleClick, label}) => (
-    <button onClick={handleClick}>
-        {label}
-    </button>
-)
-
 
 ReactDOM.render(<App/>, document.getElementById('root'));
