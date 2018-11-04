@@ -63,13 +63,11 @@ class Statistics extends React.Component{
 
     countAverage = () => {
         let summa = ((this.feedback.good*1) + (this.feedback.bad * -1))
-        if (this.feedbackCount() === 0) {return this.feedbackCount().toFixed(1)}
-        else {return (summa / this.feedbackCount()).toFixed(1)}
+        return (summa / this.feedbackCount()).toFixed(1)
     }
 
     positivePercentage = () => {
-        let count = (this.feedbackCount() === 0 ? 1 : this.feedbackCount())
-        return (this.feedback.good/count * 100).toFixed(1)
+        return (this.feedback.good/this.feedbackCount() * 100).toFixed(1)
     }
 
     feedbackCount = () => {
@@ -77,16 +75,27 @@ class Statistics extends React.Component{
     }
 
     render = () => {
-        return(
-        <div>
-            <h2>Statistics</h2>
-            <Statistic name='Hyvä' value={this.feedback.good}/>
-            <Statistic name='Neutraali' value={this.feedback.neutral}/>
-            <Statistic name='Huono' value={this.feedback.bad}/>
-            <Statistic name='Keskiarvo' value={this.countAverage()}/>
-            <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
-        </div>
-        )
+        if (this.feedbackCount()) {
+            return(
+            <div>
+                <h2>Statistics</h2>
+                <Statistic name='Hyvä' value={this.feedback.good}/>
+                <Statistic name='Neutraali' value={this.feedback.neutral}/>
+                <Statistic name='Huono' value={this.feedback.bad}/>
+                <Statistic name='Keskiarvo' value={this.countAverage()}/>
+                <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
+            </div>
+            )
+        } else {
+            return(
+                <div>
+                    <h2>Statistics</h2>
+                    <Display text='Yhtään palautetta ei ole annettu vielä.'/>
+                </div>
+            )
+
+        }
+        
     }
 
 }
