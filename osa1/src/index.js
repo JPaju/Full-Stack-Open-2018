@@ -11,13 +11,6 @@ const App = () =>{
         )   
 }
 
-const Display = ({text}) => <div>{text}</div>
-
-const Button = ({handleClick, label}) => (
-    <button onClick={handleClick}>
-        {label}
-    </button>
-)
 
 class Palaute extends React.Component {
     constructor(props) {
@@ -36,7 +29,7 @@ class Palaute extends React.Component {
         oldValue[value] = this.state.feedback[value] +1
         this.setState({feedback: oldValue})
     }
-
+    
     render() {
         return(
             <div>
@@ -60,50 +53,51 @@ class Statistics extends React.Component{
         super(props)
         this.feedback = props.feedback
     }
-
+    
     countAverage = () => {
         let summa = ((this.feedback.good*1) + (this.feedback.bad * -1))
         return (summa / this.feedbackCount()).toFixed(1)
     }
-
+    
     positivePercentage = () => {
         return (this.feedback.good/this.feedbackCount() * 100).toFixed(1)
     }
-
+    
     feedbackCount = () => {
         return Object.values(this.feedback).reduce((a,b) => {return a + b})
     }
-
-    render = () => {
-        if (this.feedbackCount()) {
-            return(
-            <div>
-                <h2>Statistics</h2>
-                <Statistic name='Hyvä' value={this.feedback.good}/>
-                <Statistic name='Neutraali' value={this.feedback.neutral}/>
-                <Statistic name='Huono' value={this.feedback.bad}/>
-                <Statistic name='Keskiarvo' value={this.countAverage()}/>
-                <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
-            </div>
-            )
-        } else {
-            return(
+    
+    render = () => (
+        <div>
+            <h2>Statistics</h2>
+            {this.feedbackCount() ? (
                 <div>
-                    <h2>Statistics</h2>
-                    <Display text='Yhtään palautetta ei ole annettu vielä.'/>
+                    <Statistic name='Hyvä' value={this.feedback.good}/>
+                    <Statistic name='Neutraali' value={this.feedback.neutral}/>
+                    <Statistic name='Huono' value={this.feedback.bad}/>
+                    <Statistic name='Keskiarvo' value={this.countAverage()}/>
+                    <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
                 </div>
-            )
-
-        }
-        
-    }
-
+            ) : (
+                <Display text='Yhtään palautetta ei ole annettu vielä.'/>
+            )}
+        </div>
+    )
 }
 
 const Statistic = ({name, value}) => (
-        <div>
-            <Display text={name + ': ' + value}/>
-        </div>
+    <div>
+        <Display text={name + ': ' + value}/>
+    </div>
 )
+
+const Display = ({text}) => <div>{text}</div>
+
+const Button = ({handleClick, label}) => (
+    <button onClick={handleClick}>
+        {label}
+    </button>
+)
+
 
 ReactDOM.render(<App/>, document.getElementById('root'));
