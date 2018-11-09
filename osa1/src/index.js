@@ -71,13 +71,15 @@ class Statistics extends React.Component{
         <div>
             <h2>Statistics</h2>
             {this.feedbackCount() ? (
-                <div>
-                    <Statistic name='Hyvä' value={this.feedback.good}/>
-                    <Statistic name='Neutraali' value={this.feedback.neutral}/>
-                    <Statistic name='Huono' value={this.feedback.bad}/>
-                    <Statistic name='Keskiarvo' value={this.countAverage()}/>
-                    <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
-                </div>
+                <table>
+                    <tbody>
+                        <Statistic name='Hyvä' value={this.feedback.good}/>
+                        <Statistic name='Neutraali' value={this.feedback.neutral}/>
+                        <Statistic name='Huono' value={this.feedback.bad}/>
+                        <Statistic name='Keskiarvo' value={this.countAverage()}/>
+                        <Statistic name='Positiivisia' value={this.positivePercentage() + '%'}/>
+                    </tbody>
+                </table>
             ) : (
                 <Display text='Yhtään palautetta ei ole annettu vielä.'/>
             )}
@@ -86,9 +88,10 @@ class Statistics extends React.Component{
 }
 
 const Statistic = ({name, value}) => (
-    <div>
-        <Display text={name + ': ' + value}/>
-    </div>
+        <tr>
+            <td><Display text={name}/></td>
+            <td><Display text={value}/></td>
+        </tr>
 )
 
 const Display = ({text}) => <div>{text}</div>
