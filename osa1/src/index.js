@@ -16,7 +16,11 @@ const Osa = ({ part }) => (
 )
 
 const Sisalto = ({ parts }) => {
+<<<<<<< HEAD
     let osat = parts.map(osa => <div key={osa.id}><Osa part={osa} key={osa.nimi} /></div>)
+=======
+    let osat = parts.map(osa => <div><Osa part={osa} key={osa.nimi} /></div>)
+>>>>>>> c68a6f1b872b7193c31f58f3d73dca3cda0b33ee
 
     return (
         <div>
