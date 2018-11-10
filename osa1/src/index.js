@@ -3,114 +3,76 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-const Otsikko = (props) => {
-    return(
-        <h1>{props.kurssi.nimi}</h1>
+const Display = ({ text }) => text
+
+const Otsikko = ({ text }) => {
+    return (
+        <h1>{text}</h1>
     )
 }
 
-const Sisalto = (props) => {
-    let osat = props.osat.map(osa => <Osa osa={osa} key={osa.nimi}/>)
+const Osa = ({ part }) => (
+    <Display text={part.nimi + ', ' + part.tehtavia + ' tehtävää.'} />
+)
 
-    return(
+const Sisalto = ({ parts }) => {
+    let osat = parts.map(osa => <div><Osa part={osa} key={osa.nimi} /></div>)
+
+    return (
         <div>
             {osat}
         </div>
     )
 }
-    
-const Osa = (props) => {
-    return(
-        <li>{props.osa.nimi}, {props.osa.tehtavia} tehtävää.</li>
-    )
-
-}
 
 const Yhteensa = (props) => {
     let tehtavienSumma = 0;
     props.osat.forEach(osa => {
-       tehtavienSumma += osa.tehtavia;
-   });
+        tehtavienSumma += osa.tehtavia;
+    });
 
-    return(
+    return (
         <p>Tehtäviä yhteensä: {tehtavienSumma}</p>
     )
 }
 
-const App = () => {
-    const kurssi = {
-        nimi: 'Half Stack -sovelluskehitys',
-        osat: [
-            {
-                nimi: 'Reactin perusteet',
-                tehtavia: 10
-            },
-            {
-                nimi :'Tiedonvälitys propseilla',
-                tehtavia: 7
-            }, 
-            {
-                nimi: 'Komponenttien tila',
-                tehtavia: 14
-            }
-        ]
-    }
+const Kurssi = ({ kurssi }) => (
+    <div>
+        <Otsikko text={kurssi.nimi} />
+        <Sisalto parts={kurssi.osat} />
+    </div>
+)
 
-    return(
+const App = () => {
+    return (
         <div>
-           <div className='kurssi'>
-                <Otsikko kurssi={kurssi}/>
-                <Sisalto osat={kurssi.osat}/>
-                <Yhteensa osat={kurssi.osat}/>
-            </div>
-            
-            <div className='counter'>
-                <CounterApp interval={0.5}/>
+            <div className='Kurssi'>
+                <Kurssi kurssi={hsOhjelmistokehitys} />
             </div>
         </div>
     )
 }
 
-class CounterApp extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {counter: 0}
-    }
-
-    setCounter = (value) => () => {this.setState({counter: value})}
-
-    render() {
-        return(
-            <div>
-                <h2>Counter</h2>
-                <div><Display counter={this.state.counter}/></div>
-                
-                <div>
-                    <Button
-                        handleClick={this.setCounter(this.state.counter + 1)}
-                        label='Increase'
-                    />
-                    <Button
-                        handleClick={this.setCounter(this.state.counter - 1)}
-                        label='Decrease'
-                    />
-                    <Button
-                        handleClick={this.setCounter(0)}
-                        label='Reset'
-                    />
-                </div>
-            </div>
-        )
-    }
+const hsOhjelmistokehitys = {
+    nimi: 'Half Stack -sovelluskehitys',
+    osat: [
+        {
+            nimi: 'Reactin perusteet',
+            tehtavia: 10,
+            id: 1
+        },
+        {
+            nimi: 'Tiedonvälitys propseilla',
+            tehtavia: 7,
+            id: 2
+        },
+        {
+            nimi: 'Komponenttien tila',
+            tehtavia: 14,
+            id: 3
+        }
+    ]
 }
 
-const Display = ({counter}) => <div>{counter}</div>
 
-const Button = ({handleClick, label}) => (
-    <button onClick={handleClick}>
-        {label}
-    </button>
-)
-
-
-ReactDOM.render(<CounterApp interval={0.5} />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
