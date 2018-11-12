@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import Form from './components/Form'
+import ContactForm from './components/ContactForm'
 import PhoneBook from './components/PhoneBook'
 
 class App extends React.Component {
@@ -8,33 +8,41 @@ class App extends React.Component {
         super(props)
         this.state = {
             persons: [
-                {
-                    name: 'Arto Hellas',
-                    id: 1
-                }
+              
             ]
         }
     }
 
-    addPerson = (name) => {
-        this.checkDuplicate(name) ?
-        this.setState({ persons: [...this.state.persons].concat({ name }) }) :
-        alert('Name already exists!')
+    addPerson = (person) => {
+        const newPerson = {
+            name: person.nimi,
+            number: person.numero
+        }
+
+        this.checkDuplicate(newPerson) ?
+            this.setState({ persons: [...this.state.persons].concat(newPerson) }) :
+            alert('Contact already exists!')
     }
 
-    checkDuplicate = (nameToCheck) =>
-        !this.state.persons.find(person => person.name === nameToCheck)
+    checkDuplicate = (personToCheck) => {
+        
+        return (!this.state.persons.find((person) => {
+            
+            console.log('Check ', person, personToCheck);
+            return(person.name === personToCheck.name &&
+            person.number === personToCheck.number)
+        }))
+    }
 
     render() {
         return (
             <div>
-                <h2>Puhelinluettelo</h2>
-                <Form
+                <h1>Puhelinluettelo</h1>
+                <ContactForm
                     onSubmitCallback={this.addPerson}
-                    placeHolder={'Lisättävä nimi'}
                     buttonText='Lisää'
-                />
-                <h2>Numerot</h2>
+                /><br/>
+                <h2>Yhteystiedot</h2>
                 <PhoneBook contacts={this.state.persons} />
             </div>
         )
