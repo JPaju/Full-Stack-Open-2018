@@ -25,14 +25,11 @@ const Sisalto = ({ parts }) => {
     )
 }
 
-const Yhteensa = (props) => {
-    let tehtavienSumma = 0;
-    props.osat.forEach(osa => {
-        tehtavienSumma += osa.tehtavia;
-    });
+const Yhteensa = ({osat}) => {
+    let total = osat.reduce((sum, part) => sum += part.tehtavia, 0)
 
     return (
-        <p>Tehtäviä yhteensä: {tehtavienSumma}</p>
+        <p>Tehtäviä yhteensä: {total}</p>
     )
 }
 
@@ -40,6 +37,7 @@ const Kurssi = ({ kurssi }) => (
     <div>
         <Otsikko text={kurssi.nimi} />
         <Sisalto parts={kurssi.osat} />
+        <Yhteensa osat={kurssi.osat}/>
     </div>
 )
 
