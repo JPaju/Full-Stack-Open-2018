@@ -1,76 +1,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import Kurssi from './components/Kurssi'
+import {Otsikko} from './components/utils'
+import './index.css'
 
 
-const Display = ({ text }) => text
-
-const Otsikko = ({ text }) => {
-    return (
-        <h1>{text}</h1>
-    )
-}
-
-const Osa = ({ part }) => (
-    <Display text={part.nimi + ', ' + part.tehtavia + ' tehtävää.'} />
-)
-
-const Sisalto = ({ parts }) => {
-    let osat = parts.map(osa => <div key={osa.id}><Osa part={osa} key={osa.nimi} /></div>)
-
+const App = ({ courses }) => {
     return (
         <div>
-            {osat}
-        </div>
-    )
-}
-
-const Yhteensa = ({osat}) => {
-    let total = osat.reduce((sum, part) => sum += part.tehtavia, 0)
-
-    return (
-        <p>Tehtäviä yhteensä: {total}</p>
-    )
-}
-
-const Kurssi = ({ kurssi }) => (
-    <div>
-        <Otsikko text={kurssi.nimi} />
-        <Sisalto parts={kurssi.osat} />
-        <Yhteensa osat={kurssi.osat}/>
-    </div>
-)
-
-const App = () => {
-    return (
-        <div>
-            <div className='Kurssi'>
-                <Kurssi kurssi={hsOhjelmistokehitys} />
+            <div>
+                <Otsikko text={'Kurssit'}/>
+                {courses.map(course => <Kurssi key={course.id} kurssi={course}/>)}
             </div>
         </div>
     )
 }
 
-const hsOhjelmistokehitys = {
-    nimi: 'Half Stack -sovelluskehitys',
-    osat: [
-        {
-            nimi: 'Reactin perusteet',
-            tehtavia: 10,
-            id: 1
-        },
-        {
-            nimi: 'Tiedonvälitys propseilla',
-            tehtavia: 7,
-            id: 2
-        },
-        {
-            nimi: 'Komponenttien tila',
-            tehtavia: 14,
-            id: 3
-        }
-    ]
-}
+const kurssit = [
+    {
+        nimi: 'Half Stack -sovelluskehitys',
+        id: 1,
+        osat: [
+            {
+                nimi: 'Reactin perusteet',
+                tehtavia: 10,
+                id: 1
+            },
+            {
+                nimi: 'Tiedonvälitys propseilla',
+                tehtavia: 7,
+                id: 2
+            },
+            {
+                nimi: 'Komponenttien tila',
+                tehtavia: 14,
+                id: 3
+            }
+        ]
+    },
+    {
+        nimi: 'Node.js',
+        id: 2,
+        osat: [
+            {
+                nimi: 'Routing',
+                tehtavia: 3,
+                id: 1
+            },
+            {
+                nimi: 'Middlewaret',
+                tehtavia: 7,
+                id: 2
+            }
+        ]
+    }
+]
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App courses={kurssit} />, document.getElementById('root'));
