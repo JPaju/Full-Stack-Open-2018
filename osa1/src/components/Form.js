@@ -26,7 +26,7 @@ class Form extends React.Component {
             <input
                 value={this.state.value}
                 onChange={this.onChange}
-                placeHolder={this.placeHolder} />
+                placeholder={this.placeHolder} />
             <button type='submit'>{this.buttonText}</button>
         </form>
     )
