@@ -1,16 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Form from './components/Form'
+import Note from './components/Note'
 import './index.css'
 
-
-const Note = ({ note }) => {
-    return (
-        <li>
-            {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
-        </li>
-    )
-}
 
 class App extends React.Component {
     constructor(props) {
@@ -28,8 +21,7 @@ class App extends React.Component {
             important: Math.random() > 0.5
         }
         const notes = this.state.notes.concat(newNote)
-
-        this.setState({ notes: notes })
+        this.setState({ notes })
     }
 
     getNotes = () => this.state.notes.map(note => <Note key={note.id} note={note} />)
@@ -40,10 +32,7 @@ class App extends React.Component {
                 <h1>Muistiinpanot</h1>
                 <ul>
                     {this.getNotes()}
-                    <Form
-                        onSubmitCallback={this.addNote}
-                        onChange={this.handleNoteChange}
-                        value={this.state.newNote} />
+                    <Form onSubmitCallback={this.addNote} />
                 </ul>
             </div>
         )

@@ -25,7 +25,7 @@ class Form extends React.Component {
                 value={this.state.value}
                 onChange={this.onChange}
                 placeholder='Uusi muistiinpano' />
-            <button type='onSubmitCallback'>Tallenna</button>
+            <button type='submit'>Tallenna</button>
         </form>
     )
 }
