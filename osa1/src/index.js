@@ -1,78 +1,34 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import ReactDOM from 'react-dom'
+import Form from './components/Form'
 
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      persons: [
+        { name: 'Arto Hellas' }
+      ]
+    }
+  }
 
-const Display = ({ text }) => text
+  addPerson = (name) => this.setState({persons: [...this.state.persons].concat({name}) })
 
-const Otsikko = ({ text }) => {
+  render() {
     return (
-        <h1>{text}</h1>
+      <div>
+        <h2>Puhelinluettelo</h2>
+        <Form
+            onSubmitCallback={this.addPerson}
+            placeHolder={'Lisättävä nimi'}
+            buttonText='Lisää'
+            />
+        <h2>Numerot</h2>
+        ...
+      </div>
     )
-}
-
-const Osa = ({ part }) => (
-    <Display text={part.nimi + ', ' + part.tehtavia + ' tehtävää.'} />
-)
-
-const Sisalto = ({ parts }) => {
-    let osat = parts.map(osa => <div key={osa.id}><Osa part={osa} key={osa.nimi} /></div>)
-
-    return (
-        <div>
-            {osat}
-        </div>
-    )
-}
-
-const Yhteensa = (props) => {
-    let tehtavienSumma = 0;
-    props.osat.forEach(osa => {
-        tehtavienSumma += osa.tehtavia;
-    });
-
-    return (
-        <p>Tehtäviä yhteensä: {tehtavienSumma}</p>
-    )
-}
-
-const Kurssi = ({ kurssi }) => (
-    <div>
-        <Otsikko text={kurssi.nimi} />
-        <Sisalto parts={kurssi.osat} />
-    </div>
-)
-
-const App = () => {
-    return (
-        <div>
-            <div className='Kurssi'>
-                <Kurssi kurssi={hsOhjelmistokehitys} />
-            </div>
-        </div>
-    )
-}
-
-const hsOhjelmistokehitys = {
-    nimi: 'Half Stack -sovelluskehitys',
-    osat: [
-        {
-            nimi: 'Reactin perusteet',
-            tehtavia: 10,
-            id: 1
-        },
-        {
-            nimi: 'Tiedonvälitys propseilla',
-            tehtavia: 7,
-            id: 2
-        },
-        {
-            nimi: 'Komponenttien tila',
-            tehtavia: 14,
-            id: 3
-        }
-    ]
+  }
 }
 
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
