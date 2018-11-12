@@ -1,40 +1,53 @@
 import React from 'react'
 
-class Form extends React.Component {
+class ContactForm extends React.Component {
     constructor(props) {
         super(props)
         this.onSubmitCallback = props.onSubmitCallback
         this.placeHolder = props.placeHolder
         this.buttonText = props.buttonText
+        this.fields = props.fields
         this.state = {
-            value: ''
+            value: {
+                nimi: '',
+                numero: ''
+            }
         }
     }
 
-    onChange = (event) => {
-        this.setState({ value: event.target.value })
+    onChangeHandler = (type) => (event) => {
+            const newValue = this.state.value
+            newValue[type] = event.target.value
+            this.setState({ value: newValue})
     }
-
+    
     onSubmit = (event) => {
         event.preventDefault()
         this.onSubmitCallback(this.state.value)
-        this.setState({ value: '' })
+        this.setState({ value: {nimi: '', numero: ''} })
     }
 
     render = () => (
         <form onSubmit={this.onSubmit}>
             <input
-                value={this.state.value}
-                onChange={this.onChange}
-                placeholder={this.placeHolder} />
+                value={this.state.value.numero}
+                onChange={this.onChangeHandler('numero')}
+                placeholder='Numero' />
+            <br />
+
+            <input
+                value={this.state.value.nimi}
+                onChange={this.onChangeHandler('nimi')}
+                placeholder='Nimi' />
+            <br />
             <button type='submit'>{this.buttonText}</button>
         </form>
     )
 }
 
-Form.defaultProps = {
+ContactForm.defaultProps = {
     buttonText: 'Submit',
-    placeHolder: 'Value'
+    placeHolder: 'Value',
 }
 
-export default Form
+export default ContactForm
