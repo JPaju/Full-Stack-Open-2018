@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Form from './components/Form'
 import './index.css'
 
 
@@ -19,12 +20,30 @@ class App extends React.Component {
         }
     }
 
+    addNote = (note) => {
+        const newNote = {
+            id: this.state.notes.length + 1,
+            content: note,
+            date: new Date().toISOString(),
+            important: Math.random() > 0.5
+        }
+        const notes = this.state.notes.concat(newNote)
+
+        this.setState({ notes: notes })
+    }
+
+    getNotes = () => this.state.notes.map(note => <Note key={note.id} note={note} />)
+
     render() {
         return (
             <div>
                 <h1>Muistiinpanot</h1>
                 <ul>
-                    {this.state.notes.map(note => <Note key={note.id} note={note} />)}
+                    {this.getNotes()}
+                    <Form
+                        onSubmitCallback={this.addNote}
+                        onChange={this.handleNoteChange}
+                        value={this.state.newNote} />
                 </ul>
             </div>
         )
