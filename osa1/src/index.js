@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Form from './components/Form'
 import Note from './components/Note'
+import Button from './components/Button'
 import './index.css'
 
 
@@ -9,7 +10,8 @@ class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            notes: props.notes
+            notes: props.notes,
+            showAll: true
         }
     }
 
@@ -24,19 +26,25 @@ class App extends React.Component {
         this.setState({ notes })
     }
 
-    getNotes = () => this.state.notes.map(note => <Note key={note.id} note={note} />)
-
-    render() {
-        return (
-            <div>
-                <h1>Muistiinpanot</h1>
-                <ul>
-                    {this.getNotes()}
-                    <Form onSubmitCallback={this.addNote} />
-                </ul>
-            </div>
-        )
+    getNotes = () => {
+        const notesToRender = this.state.showAll ?
+            this.state.notes :
+            this.state.notes.filter(note => note.important)
+        return notesToRender.map(note => <Note key={note.id} note={note} />)
     }
+
+    render = () => (
+        <div>
+            <h1>Muistiinpanot</h1>
+            <ul>
+                {this.getNotes()}
+                <Form onSubmitCallback={this.addNote} />
+                <Button
+                    label={this.state.showAll ? 'Vain tärkeät' : 'Näytä kaikki'} 
+                    callback={() => this.setState({showAll: !this.state.showAll})}/>
+            </ul>
+        </div>
+    )
 }
 
 const notes = [
