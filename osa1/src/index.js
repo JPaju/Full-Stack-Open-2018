@@ -8,7 +8,10 @@ class App extends React.Component {
         super(props)
         this.state = {
             persons: [
-              
+                { name: 'Arto Hellas', number: '040-123456' },
+                { name: 'Martti Tienari', number: '040-123456' },
+                { name: 'Arto Järvinen', number: '040-123456' },
+                { name: 'Lea Kutvonen', number: '040-123456' }
             ]
         }
     }
@@ -25,13 +28,11 @@ class App extends React.Component {
     }
 
     checkDuplicate = (personToCheck) => {
-        
-        return (!this.state.persons.find((person) => {
-            
-            console.log('Check ', person, personToCheck);
-            return(person.name === personToCheck.name &&
+
+        return (!this.state.persons.find((person) => (
+            person.name === personToCheck.name &&
             person.number === personToCheck.number)
-        }))
+        ))
     }
 
     render() {
@@ -41,7 +42,7 @@ class App extends React.Component {
                 <ContactForm
                     onSubmitCallback={this.addPerson}
                     buttonText='Lisää'
-                /><br/>
+                /><br />
                 <h2>Yhteystiedot</h2>
                 <PhoneBook contacts={this.state.persons} />
             </div>
