@@ -1,7 +1,10 @@
 import React from 'react'
 import Contact from './Contact'
 
-const PhoneBook = ({ contacts }) => {
+
+const PhoneBook = ({ contacts, filter }) => {
+
+    contacts = contacts.filter(contact => contact.name.toLowerCase().startsWith(filter.toLowerCase()))
 
     const contactsToShow = contacts.length > 0 ?
         <table>

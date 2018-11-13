@@ -30,15 +30,15 @@ class ContactForm extends React.Component {
     render = () => (
         <form onSubmit={this.onSubmit}>
             <input
-                value={this.state.value.numero}
-                onChange={this.onChangeHandler('numero')}
-                placeholder='Numero' />
-            <br />
-
-            <input
                 value={this.state.value.nimi}
                 onChange={this.onChangeHandler('nimi')}
                 placeholder='Nimi' />
+            <br />
+
+            <input
+                value={this.state.value.numero}
+                onChange={this.onChangeHandler('numero')}
+                placeholder='Numero' />
             <br />
             <button type='submit'>{this.buttonText}</button>
         </form>

@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import ContactForm from './components/ContactForm'
 import PhoneBook from './components/PhoneBook'
+import FilterForm from './components/FilterForm';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -12,7 +14,8 @@ class App extends React.Component {
                 { name: 'Martti Tienari', number: '040-123456' },
                 { name: 'Arto Järvinen', number: '040-123456' },
                 { name: 'Lea Kutvonen', number: '040-123456' }
-            ]
+            ],
+            filter: ''
         }
     }
 
@@ -35,16 +38,28 @@ class App extends React.Component {
         ))
     }
 
+    filterContacts = (filter) => {
+        this.setState({filter: filter})
+    }
+
     render() {
         return (
             <div>
                 <h1>Puhelinluettelo</h1>
+
+                <h2>Rajaa näytettäviä yhteystietoja</h2>
+                <FilterForm onChangeCallback={this.filterContacts}/>
+
+                <h2>Lisää uusi yhteystieto</h2>
                 <ContactForm
                     onSubmitCallback={this.addPerson}
                     buttonText='Lisää'
                 /><br />
+                
                 <h2>Yhteystiedot</h2>
-                <PhoneBook contacts={this.state.persons} />
+                <PhoneBook
+                    contacts={this.state.persons} 
+                    filter={this.state.filter}/>
             </div>
         )
     }
