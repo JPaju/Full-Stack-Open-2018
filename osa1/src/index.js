@@ -19,10 +19,10 @@ class App extends React.Component {
         }
     }
 
-    addPerson = (person) => {
+    addContact = (contact) => {
         const newPerson = {
-            name: person.nimi,
-            number: person.numero
+            name: contact.nimi,
+            number: contact.numero
         }
 
         this.checkDuplicate(newPerson) ?
@@ -30,11 +30,11 @@ class App extends React.Component {
             alert('Contact already exists!')
     }
 
-    checkDuplicate = (personToCheck) => {
+    checkDuplicate = (contactToCheck) => {
 
-        return (!this.state.persons.find((person) => (
-            person.name === personToCheck.name &&
-            person.number === personToCheck.number)
+        return (!this.state.persons.find((contact) => (
+            contact.name === contactToCheck.name &&
+            contact.number === contactToCheck.number)
         ))
     }
 
@@ -52,10 +52,10 @@ class App extends React.Component {
 
                 <h2>Lisää uusi yhteystieto</h2>
                 <ContactForm
-                    onSubmitCallback={this.addPerson}
+                    onSubmitCallback={this.addContact}
                     buttonText='Lisää'
                 /><br />
-                
+
                 <h2>Yhteystiedot</h2>
                 <PhoneBook
                     contacts={this.state.persons} 
