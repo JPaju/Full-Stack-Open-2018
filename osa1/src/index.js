@@ -1,61 +1,6 @@
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom';
-import axios from 'axios'
-import Form from './components/Form'
-import Notes from './components/Notes'
-import Button from './components/Button'
+import App from './App'
 import './index.css'
-
-
-class App extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            notes: [],
-            showAll: true
-        }
-    }
-
-    addNote = (note) => {
-        const newNote = {
-            id: this.state.notes.length + 1,
-            content: note,
-            date: new Date().toISOString(),
-            important: Math.random() > 0.5
-        }
-        const notes = this.state.notes.concat(newNote)
-        this.setState({ notes })
-    }
-
-    fetchNotes = () => {
-        axios.get('http://localhost:3001/notes').then(response => {
-            return response.data
-        }).then(notes => {
-            console.log('Fetched notes: ', notes);
-            this.setState({ notes })
-        }).catch(err => console.log(err))
-    }
-
-    componentDidMount = () => {
-        this.fetchNotes()
-    }
-
-    render = () => (
-        <div>
-            <h1>Muistiinpanot</h1>
-            <ul>
-                <Notes notes={this.state.notes} importantOnly={this.state.showAll} />
-                <Form onSubmitCallback={this.addNote} />
-                <Button
-                    label={this.state.showAll ? 'Vain tärkeät' : 'Näytä kaikki'}
-                    callback={() => this.setState({ showAll: !this.state.showAll })} />
-
-                <Button
-                    label='Päivitä'
-                    callback={() => this.fetchNotes()} />
-            </ul>
-        </div>
-    )
-}
 
 ReactDOM.render(<App />, document.getElementById('root'));
