@@ -17,23 +17,18 @@ class App extends React.Component {
     fetchCountries = () => {
         fetch('https://restcountries.eu/rest/v2/all')
             .then(response => response.json())
-            .then(countriesResponse => {
-                this.setState({ countries: countriesResponse })
-            })
+            .then(countries => this.setState({ countries }))
     }
 
     componentDidMount = () => this.fetchCountries()
 
-    render = () => {
-        return (
-            <div>
-                <h1>Find countries</h1>
-                <FilterForm onChangeCallback={(filter) => this.setState({ filter })} /><br/>
-                <Countries countries={this.state.countries} filter={this.state.filter}/>
-            </div>
-
-        )
-    }
+    render = () => (
+        <div>
+            <h1>Find countries</h1>
+            <FilterForm onChangeCallback={(filter) => this.setState({ filter })} /><br />
+            <Countries countries={this.state.countries} filter={this.state.filter} />
+        </div>
+    )
 }
 
 
