@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Form from './components/Form'
-import Note from './components/Note'
+import Notes from './components/Notes'
 import Button from './components/Button'
 import './index.css'
 
@@ -10,9 +10,10 @@ class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            notes: props.notes,
+            notes: [],
             showAll: true
         }
+        this.fetchNotes()
     }
 
     addNote = (note) => {
@@ -26,46 +27,31 @@ class App extends React.Component {
         this.setState({ notes })
     }
 
-    getNotes = () => {
-        const notesToRender = this.state.showAll ?
-            this.state.notes :
-            this.state.notes.filter(note => note.important)
-        return notesToRender.map(note => <Note key={note.id} note={note} />)
+    fetchNotes = () => {
+        fetch('http://localhost:3001/notes').then(response => {
+            return response.json()
+        }).then(notes => {
+            console.log('Fetched notes: ', notes);
+            this.setState({ notes})
+        }).catch(err => console.log(err))
     }
 
     render = () => (
         <div>
             <h1>Muistiinpanot</h1>
             <ul>
-                {this.getNotes()}
+                <Notes notes={this.state.notes} importantOnly={this.state.showAll} />
                 <Form onSubmitCallback={this.addNote} />
                 <Button
-                    label={this.state.showAll ? 'Vain tärkeät' : 'Näytä kaikki'} 
-                    callback={() => this.setState({showAll: !this.state.showAll})}/>
+                    label={this.state.showAll ? 'Vain tärkeät' : 'Näytä kaikki'}
+                    callback={() => this.setState({ showAll: !this.state.showAll })} />
+
+                <Button
+                    label='Päivitä'
+                    callback={() => this.fetchNotes()} />
             </ul>
         </div>
     )
 }
 
-const notes = [
-    {
-        id: 1,
-        content: 'HTML on helppoa',
-        date: '2017-12-10T17:30:31.098Z',
-        important: true
-    },
-    {
-        id: 2,
-        content: 'Selain pystyy suorittamaan vain Javascriptiä',
-        date: '2017-12-10T17:30:31.098Z',
-        important: false
-    },
-    {
-        id: 3,
-        content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
-        date: '2017-11-07T06:43:14.098Z',
-        important: false
-    }
-]
-
-ReactDOM.render(<App notes={notes} />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
