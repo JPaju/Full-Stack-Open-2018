@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios'
 import Form from './components/Form'
 import Notes from './components/Notes'
 import Button from './components/Button'
@@ -13,7 +14,6 @@ class App extends React.Component {
             notes: [],
             showAll: true
         }
-        this.fetchNotes()
     }
 
     addNote = (note) => {
@@ -28,12 +28,16 @@ class App extends React.Component {
     }
 
     fetchNotes = () => {
-        fetch('http://localhost:3001/notes').then(response => {
-            return response.json()
+        axios.get('http://localhost:3001/notes').then(response => {
+            return response.data
         }).then(notes => {
             console.log('Fetched notes: ', notes);
-            this.setState({ notes})
+            this.setState({ notes })
         }).catch(err => console.log(err))
+    }
+
+    componentDidMount = () => {
+        this.fetchNotes()
     }
 
     render = () => (
@@ -54,4 +58,4 @@ class App extends React.Component {
     )
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
