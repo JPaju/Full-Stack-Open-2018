@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios'
+import noteService from './services/notes'
 import Form from './components/Form'
 import Notes from './components/Notes'
 import Button from './components/Button'
@@ -21,24 +21,25 @@ class App extends React.Component {
             date: new Date().toISOString(),
             important: Math.random() > 0.5
         }
-        axios.post('http://localhost:3001/notes', newNote)
-            .then(this.fetchNotes())
+        noteService
+            .create(newNote)
+            .then(response => this.fetchNotes())
             .catch(error => console.log(error))
     }
 
     toggleImportance = (id) => () => {
-        const url = `http://localhost:3001/notes/${id}`
         const note = this.state.notes.find(n => n.id === id)
-        const changedNote = { ...note, important: !note.important }
+        const newNote = { ...note, important: !note.important }
 
-        axios
-            .put(url, changedNote)
+        noteService
+            .update(id, newNote)
             .then(response => this.fetchNotes())
     }
 
 
     fetchNotes = () => {
-        axios.get('http://localhost:3001/notes').then(response => response.data)
+        noteService
+            .getAll()
             .then(notes => this.setState({ notes }))
             .catch(err => console.log(err))
     }
