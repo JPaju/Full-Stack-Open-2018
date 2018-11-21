@@ -9,7 +9,6 @@
 /coverage
 /osa0
 /osat2-7
-*db.json
 
 # production
 /build
