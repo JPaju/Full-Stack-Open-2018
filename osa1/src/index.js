@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import ContactForm from './components/ContactForm'
 import PhoneBook from './components/PhoneBook'
-import FilterForm from './components/FilterForm';
+import FilterForm from './components/FilterForm'
+import Notification from './components/Notification'
 import contactService from './services/contacts'
+import './index.css'
 
 
 class App extends React.Component {
@@ -11,7 +13,8 @@ class App extends React.Component {
         super(props)
         this.state = {
             contacts: [],
-            filter: ''
+            filter: '',
+            error: null
         }
     }
 
@@ -21,16 +24,21 @@ class App extends React.Component {
             number: contact.numero
         }
 
-        if (this.isDuplicate(newPerson) &&
-            window.confirm(`${newPerson.name} on jo luettelossa, korvataanko numero uudella?`)) {
+        if (this.isDuplicate(newPerson)) {
+            if (window.confirm(`"${newPerson.name}" on jo luettelossa, korvataanko numero uudella?`)) {
                 const id = this.state.contacts.find(c => c.name === newPerson.name).id
                 contactService.update(id, newPerson)
                     .then(response => this.fetchContacts())
-                return
+                return this.addNotification(
+                    `Päivitettiin henkilön ${newPerson.name} numeroksi ${newPerson.number}`, 5)
+            }
+        } else {
+            contactService.create(newPerson)
+                .then(response => this.fetchContacts())
+            this.addNotification(
+                `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
         }
 
-        contactService.create(newPerson)
-            .then(response => this.fetchContacts())
     }
 
     removeContact = (id) => () => {
@@ -48,6 +56,13 @@ class App extends React.Component {
         this.state.contacts.find((contact) => contact.name === contactToCheck.name)
     )
 
+    addNotification = (message, time) => {
+        this.setState({ error: message })
+        setTimeout(() => {
+            this.setState({ error: null })
+        }, time * 1000)
+    }
+
     filterContacts = (filter) => {
         this.setState({ filter: filter })
     }
@@ -58,9 +73,7 @@ class App extends React.Component {
             .catch(err => console.log(err))
     }
 
-    componentDidMount = () => {
-        this.fetchContacts()
-    }
+    componentDidMount = () => this.fetchContacts()
 
     render() {
         return (
@@ -71,6 +84,8 @@ class App extends React.Component {
                 <FilterForm onChangeCallback={this.filterContacts} />
 
                 <h2>Lisää uusi yhteystieto</h2>
+                <Notification message={this.state.error} />
+
                 <ContactForm
                     onSubmitCallback={this.addContact}
                     buttonText='Lisää'

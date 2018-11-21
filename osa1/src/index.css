@@ -14,5 +14,16 @@ code {
 }
 
 button {
-  margin: 5px;
+  margin: 3px;
+}
+
+.notification {
+  color: darksalmon;
+  background: green;
+  display: inline-block;
+  font-size: 15px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: black;
+  padding: 10px;
 }
