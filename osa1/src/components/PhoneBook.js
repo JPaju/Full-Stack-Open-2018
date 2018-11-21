@@ -2,7 +2,7 @@ import React from 'react'
 import Contact from './Contact'
 
 
-const PhoneBook = ({ contacts, filter }) => {
+const PhoneBook = ({ contacts, filter, deleteContact }) => {
 
     contacts = contacts.filter(contact => contact.name.toLowerCase().startsWith(filter.toLowerCase()))
 
@@ -12,7 +12,9 @@ const PhoneBook = ({ contacts, filter }) => {
                 {contacts.map(contact =>
                     <Contact
                         key={contact.name + contact.number}
-                        contact={contact} />)}
+                        contact={contact}
+                        deleteContact={deleteContact(contact.id)}
+                    />)}
             </tbody>
         </table>
         :
