@@ -29,17 +29,24 @@ class App extends React.Component {
                 const id = this.state.contacts.find(c => c.name === newPerson.name).id
                 contactService.update(id, newPerson)
                     .then(response => this.fetchContacts())
+                    .catch(err => {
+                        this.createContact(newPerson)
+                    })
                 return this.addNotification(
                     `Päivitettiin henkilön ${newPerson.name} numeroksi ${newPerson.number}`, 5)
             }
         } else {
-            contactService.create(newPerson)
-                .then(response => this.fetchContacts())
+            this.createContact(newPerson)
             this.addNotification(
                 `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
         }
 
     }
+
+    createContact = (newContact) => (
+        contactService.create(newContact)
+            .then(response => this.fetchContacts())
+    )
 
     removeContact = (id) => () => {
         const name = this.state.contacts
