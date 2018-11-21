@@ -7,6 +7,10 @@ const getAll = () => (
         .then(response => response.data)
 )
 
+const get = (id) => (
+    axios.get(`${baseUrl}/${id}`)
+)
+
 const create = (newObject) => (
     axios.post(baseUrl, newObject)
         .then(response => response.data)
@@ -19,7 +23,7 @@ const update = (id, newObject) => (
 
 const remove = (id) => (
     axios.delete(`${baseUrl}/${id}`)
-        .then(response => console.log(`Removed person with id: ${id}`))
+        .then(response => console.log(`Removed person with id ${id}`))
 )
 
-export default { getAll, create, update, remove }
+export default { getAll, get, create, update, remove }

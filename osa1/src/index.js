@@ -21,13 +21,16 @@ class App extends React.Component {
             number: contact.numero
         }
 
-        if (!this.checkDuplicate(newPerson)) {
-            // this.setState({ contacts: [...this.state.contacts].concat(newPerson) })
-            contactService.create(newPerson)
-                .then(response => this.fetchContacts())
-        } else {
-            alert('Contact already exists!')
+        if (this.isDuplicate(newPerson) &&
+            window.confirm(`${newPerson.name} on jo luettelossa, korvataanko numero uudella?`)) {
+                const id = this.state.contacts.find(c => c.name === newPerson.name).id
+                contactService.update(id, newPerson)
+                    .then(response => this.fetchContacts())
+                return
         }
+
+        contactService.create(newPerson)
+            .then(response => this.fetchContacts())
     }
 
     removeContact = (id) => () => {
@@ -40,12 +43,9 @@ class App extends React.Component {
                 .catch(err => console.log(err))
         }
     }
-    
-    checkDuplicate = (contactToCheck) => (
-        this.state.contacts.find((contact) => (
-            contact.name === contactToCheck.name &&
-            contact.number === contactToCheck.number
-        ))
+
+    isDuplicate = (contactToCheck) => (
+        this.state.contacts.find((contact) => contact.name === contactToCheck.name)
     )
 
     filterContacts = (filter) => {
