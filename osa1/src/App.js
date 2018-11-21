@@ -3,6 +3,7 @@ import noteService from './services/notes'
 import Form from './components/Form'
 import Notes from './components/Notes'
 import Button from './components/Button'
+import Notification from './components/Notification'
 import './index.css'
 
 
@@ -11,7 +12,8 @@ class App extends React.Component {
         super(props)
         this.state = {
             notes: [],
-            showAll: true
+            showAll: true,
+            error: null
         }
     }
 
@@ -27,6 +29,13 @@ class App extends React.Component {
             .catch(error => console.log(error))
     }
 
+    addNotification = (message, time) => {
+        this.setState({ error: message })        
+        setTimeout(() => {
+            this.setState({ error: null })
+        }, time)
+    }
+
     toggleImportance = (id) => () => {
         const note = this.state.notes.find(n => n.id === id)
         const newNote = { ...note, important: !note.important }
@@ -34,6 +43,10 @@ class App extends React.Component {
         noteService
             .update(id, newNote)
             .then(response => this.fetchNotes())
+            .catch(err => {
+                this.addNotification(`Muistiinpano "${note.content}" on jo poistettu palvelimelta`, 5000)
+                this.fetchNotes()
+            })
     }
 
 
@@ -49,6 +62,8 @@ class App extends React.Component {
     render = () => (
         <div>
             <h1>Muistiinpanot</h1>
+            <Notification message={this.state.error} />
+
             <ul>
                 <Notes
                     notes={this.state.notes}
