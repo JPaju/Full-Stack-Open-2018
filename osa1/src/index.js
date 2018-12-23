@@ -36,9 +36,15 @@ class App extends React.Component {
                     `Päivitettiin henkilön ${newPerson.name} numeroksi ${newPerson.number}`, 5)
             }
         } else {
-            this.createContact(newPerson)
-            this.addNotification(
-                `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
+            //Ensure that both name and number is provided
+            //if not, display notification
+            if (!newPerson.name || ! newPerson.number) {
+                this.addNotification('Syötä nimi JA numero!', 5)
+            } else {
+                this.createContact(newPerson)
+                this.addNotification(
+                    `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
+            }
         }
 
     }
