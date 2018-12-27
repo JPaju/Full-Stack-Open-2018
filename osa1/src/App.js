@@ -27,6 +27,8 @@ class App extends React.Component {
             .create(newNote)
             .then(response => this.fetchNotes())
             .catch(error => console.log(error))
+
+        this.addNotification("Muistiinpano lisätty", 5000)
     }
 
     addNotification = (message, time) => {
@@ -49,6 +51,21 @@ class App extends React.Component {
             })
     }
 
+    deleteNote = (id) => () => {
+        const note = this.state.notes.find(n => n.id === id)
+
+        noteService
+            .remove(id)
+            .then(response => {
+                this.addNotification(`Muistiinpano "${note.content}" poistettiin onnistuneesti`, 5000)
+                this.fetchNotes()
+            })
+            .catch(err => {
+                this.addNotification(`Muistiinpano "${note.content}" on jo poistettu palvelimelta`, 5000)
+                this.fetchNotes()
+            })
+
+    }
 
     fetchNotes = () => {
         noteService
@@ -68,15 +85,20 @@ class App extends React.Component {
                 <Notes
                     notes={this.state.notes}
                     importantOnly={this.state.showAll}
-                    toggleImportance={this.toggleImportance} />
+                    toggleImportance={this.toggleImportance} 
+                    deleteNote={this.deleteNote}
+                />
+
                 <Form onSubmitCallback={this.addNote} />
+                
                 <Button
                     label={this.state.showAll ? 'Vain tärkeät' : 'Näytä kaikki'}
-                    callback={() => this.setState({ showAll: !this.state.showAll })} />
-
+                    callback={() => this.setState({ showAll: !this.state.showAll })}
+                />
                 <Button
                     label='Päivitä'
-                    callback={() => this.fetchNotes()} />
+                    callback={() => this.fetchNotes()}
+                />
             </ul>
         </div>
     )
