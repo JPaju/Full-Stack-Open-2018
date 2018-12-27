@@ -24,29 +24,29 @@ class App extends React.Component {
             number: contact.numero
         }
 
+        //Ensure that both name and number is provided
+        //if not, display notification
+        if (!newPerson.name || ! newPerson.number) {
+            this.addNotification('Syötä nimi JA numero!', 5)
+            return
+        }
+
         if (this.isDuplicate(newPerson)) {
             if (window.confirm(`"${newPerson.name}" on jo luettelossa, korvataanko numero uudella?`)) {
                 const id = this.state.contacts.find(c => c.name === newPerson.name).id
                 contactService.update(id, newPerson)
-                    .then(response => this.fetchContacts())
-                    .catch(err => {
-                        this.createContact(newPerson)
+                    .then(response => {
+                        this.fetchContacts()
+                        this.addNotification(
+                            `Päivitettiin henkilön ${newPerson.name} numeroksi ${newPerson.number}`, 5)
                     })
-                return this.addNotification(
-                    `Päivitettiin henkilön ${newPerson.name} numeroksi ${newPerson.number}`, 5)
+                    .catch(err => this.addNotification(`Tietojen päivittäminen epäonnistui!`, 5))
             }
         } else {
-            //Ensure that both name and number is provided
-            //if not, display notification
-            if (!newPerson.name || ! newPerson.number) {
-                this.addNotification('Syötä nimi JA numero!', 5)
-            } else {
-                this.createContact(newPerson)
-                this.addNotification(
-                    `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
-            }
+            this.createContact(newPerson)
+            this.addNotification(
+                `Lisättiin henkilö ${newPerson.name}, numero: ${newPerson.number}`, 5)
         }
-
     }
 
     createContact = (newContact) => (
