@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Blogs from './components/Blogs.jsx'
-import LoginForm from './components/LoginForm.jsx'
-import WelcomeUser from './components/WelcomeUser.jsx'
-import Notification from './components/Notification.jsx'
+import Blogs from './components/Blogs'
+import LoginForm from './components/LoginForm'
+import WelcomeUser from './components/WelcomeUser'
+import Notification from './components/Notification'
 
 import blogService from './services/blogService'
 import loginService from './services/loginService'
@@ -22,6 +22,7 @@ class App extends React.Component {
     componentDidMount() {
         const savedUser = JSON.parse(window.localStorage.getItem('loggedBlogUser'))
         if (savedUser) {
+            blogService.setToken(savedUser.token)
             this.setState({
                 user: savedUser,
                 loggedIn: true
@@ -44,7 +45,7 @@ class App extends React.Component {
                     </div>
                     :
                     <div>
-                        <Notification message={this.state.error} />
+                        <Notification message={this.state.error} type={'error'}/>
                         <LoginForm loginCallBack={this.login} error={this.state.error} />
                     </div>
                 }
@@ -56,7 +57,6 @@ class App extends React.Component {
         try {
             const loginData = await loginService.login({ username, password })
             this.setState({
-                ...this.state,
                 user: {
                     name: loginData.name,
                     username: loginData.username
@@ -66,7 +66,6 @@ class App extends React.Component {
             blogService.setToken(loginData.token)
             window.localStorage.setItem('loggedBlogUser', JSON.stringify(loginData))
         } catch (error) {
-            console.log('Error while logging in!')
             this.setState({ error: 'Wrong username or password' })
             setTimeout(() => this.setState({ error: '' }), 3000)
         }

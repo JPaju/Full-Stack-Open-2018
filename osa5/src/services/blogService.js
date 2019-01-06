@@ -3,26 +3,23 @@ const baseUrl = '/api/blogs'
 
 let token = 'testii'
 
-const getAll = () => {
-    return (
-        axios
-            .get(baseUrl)
-            .then(response => response.data)
-    )
-}
+const getAll = () => (
+    axios
+        .get(baseUrl)
+        .then(response => response.data)
+)
+
 
 const create = (newObject) => {
-    console.log('create', token)
     const header = {
-        Authorization: token
+        'Authorization': 'bearer ' + token
     }
 
-    return axios.post(baseUrl, newObject, header)
+    return axios.post(baseUrl, newObject, { headers: header })
 }
 
-const setToken = async (newToken) => {
-    token = `bearer ${newToken}`
-    console.log('Set token to:', token)
+const setToken = (newToken) => {
+    token = newToken.replace('bearer ', '')
 }
 
-export default { getAll, setToken }
+export default { getAll, create, setToken }
