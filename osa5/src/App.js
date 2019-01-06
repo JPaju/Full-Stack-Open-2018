@@ -22,9 +22,15 @@ class App extends React.Component {
     componentDidMount() {
         const savedUser = JSON.parse(window.localStorage.getItem('loggedBlogUser'))
         if (savedUser) {
-            blogService.setToken(savedUser.token)
+            const { token, ...user } = savedUser
+
+            console.log('savedUser:', savedUser)
+            console.log('user:', user)
+            console.log('token:', token)
+
+            blogService.setToken(token)
             this.setState({
-                user: savedUser,
+                user,
                 loggedIn: true
             })
         }
