@@ -86,40 +86,40 @@ class App extends React.Component {
         }
     }
 
-blogDeleteHandler = (blog) => {
-    return (event) => {
-        event.preventDefault()
-        const confirmed = window.confirm(`Do you want to delete ${blog.title}?`)
-        if (confirmed) {
-            blogService
-                .remove(blog._id)
-                .then(() => this.fetchBlogs())
+    blogDeleteHandler = (blog) => {
+        return (event) => {
+            event.preventDefault()
+            const confirmed = window.confirm(`Do you want to delete ${blog.title}?`)
+            if (confirmed) {
+                blogService
+                    .remove(blog._id)
+                    .then(() => this.fetchBlogs())
+            }
         }
     }
-}
 
-fetchBlogs = () => {
-    blogService.getAll().then(blogs => this.setState({ blogs }))
-}
-
-login = async ({ username, password }) => {
-    try {
-        const loginData = await loginService.login({ username, password })
-        const { token, ...user } = loginData
-
-        this.setState({ user, loggedIn: true })
-        blogService.setToken(token)
-        window.localStorage.setItem('loggedBlogUser', JSON.stringify(loginData))
-    } catch (error) {
-        this.setState({ error: 'Wrong username or password' })
-        setTimeout(() => this.setState({ error: '' }), 3000)
+    fetchBlogs = () => {
+        blogService.getAll().then(blogs => this.setState({ blogs }))
     }
-}
 
-logOut = () => {
-    window.localStorage.removeItem('loggedBlogUser')
-    this.setState({ user: null, loggedIn: false })
-}
+    login = async ({ username, password }) => {
+        try {
+            const loginData = await loginService.login({ username, password })
+            const { token, ...user } = loginData
+
+            this.setState({ user, loggedIn: true })
+            blogService.setToken(token)
+            window.localStorage.setItem('loggedBlogUser', JSON.stringify(loginData))
+        } catch (error) {
+            this.setState({ error: 'Wrong username or password' })
+            setTimeout(() => this.setState({ error: '' }), 3000)
+        }
+    }
+
+    logOut = () => {
+        window.localStorage.removeItem('loggedBlogUser')
+        this.setState({ user: null, loggedIn: false })
+    }
 }
 
 export default App;
