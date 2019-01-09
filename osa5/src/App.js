@@ -42,7 +42,7 @@ class App extends React.Component {
             <div>
                 <h1>Blogs</h1>
                 {this.state.loggedIn ?
-                    <div>
+                    <div className='loggedIn'>
                         <WelcomeUser
                             name={this.state.user.name}
                             logoutCallBack={this.logOut}
@@ -55,22 +55,22 @@ class App extends React.Component {
                                 }}
                             />
                         </Togglable>
+                        <BlogList
+                            blogs={this.state.blogs}
+                            currentUser={this.state.user}
+                            updateBlogs={this.fetchBlogs}
+                            likeBlog={this.blogLikeHandler}
+                            deleteBlog={this.blogDeleteHandler}
+                        />
                     </div>
                     :
-                    <div>
+                    <div className='loginContent'>
                         <Notification message={this.state.error} type={'error'} />
-                        <Togglable buttonLabel='Log in'>
+                        <Togglable buttonLabel='Open login form'>
                             <LoginForm loginCallBack={this.login} error={this.state.error} />
                         </Togglable>
                     </div>
                 }
-                <BlogList
-                    blogs={this.state.blogs}
-                    currentUser={this.state.user}
-                    updateBlogs={this.fetchBlogs}
-                    likeBlog={this.blogLikeHandler}
-                    deleteBlog={this.blogDeleteHandler}
-                />
             </div>
         )
     }
@@ -101,8 +101,8 @@ class App extends React.Component {
 
     fetchBlogs = () => {
         blogService.getAll()
-        .then(blogs => this.setState({ blogs }))
-        .catch(err => console.log(err))
+            .then(blogs => this.setState({ blogs }))
+            .catch(err => console.log(err))
     }
 
     login = async ({ username, password }) => {

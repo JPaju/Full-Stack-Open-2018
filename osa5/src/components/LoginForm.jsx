@@ -27,7 +27,7 @@ class LoginForm extends React.Component {
         <div>
             <h2>Login</h2>
 
-            <form onSubmit={this.login}>
+            <form onSubmit={this.login} className='loginForm'>
                 <div>
                     Username 
                     <input

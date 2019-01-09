@@ -7,7 +7,6 @@ const getAll = () => (
     axios
         .get(baseUrl)
         .then(response => response.data)
-        //.catch(err => console.log(err))
 )
 
 const create = (newObject) => {

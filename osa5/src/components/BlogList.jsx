@@ -4,7 +4,7 @@ import Blog from './Blog'
 
 const BlogList = ({ blogs, currentUser, updateBlogs, likeBlog, deleteBlog }) => {
     return (
-        <div>
+        <div className='blogList'>
             <h2>Bloglist</h2>
             {blogs
                 .sort((a, b) => b.likes - a.likes)
