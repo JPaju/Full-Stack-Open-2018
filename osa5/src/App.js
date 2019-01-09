@@ -33,7 +33,6 @@ class App extends React.Component {
                 loggedIn: true
             })
         }
-
         this.fetchBlogs()
     }
 
@@ -83,6 +82,7 @@ class App extends React.Component {
             blogService
                 .update(_id, { likes: likes + 1 })
                 .then(() => this.fetchBlogs())
+                .catch(err => console.log(err))
         }
     }
 
@@ -94,12 +94,15 @@ class App extends React.Component {
                 blogService
                     .remove(blog._id)
                     .then(() => this.fetchBlogs())
+                    .catch(err => console.log(err))
             }
         }
     }
 
     fetchBlogs = () => {
-        blogService.getAll().then(blogs => this.setState({ blogs }))
+        blogService.getAll()
+        .then(blogs => this.setState({ blogs }))
+        .catch(err => console.log(err))
     }
 
     login = async ({ username, password }) => {
