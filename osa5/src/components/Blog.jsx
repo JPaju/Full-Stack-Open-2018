@@ -11,12 +11,11 @@ class Blog extends React.Component {
     expandedBlog = () => {
         const blog = this.props.blog
         return (
-            <div>
+            <div className='expandedBlog'>
                 <i>{blog.title}</i>, by {blog.author} <br />
                 <a href={blog.url} target="_blank" rel="noopener noreferrer">
                     {blog.url}
-                </a>{" "}
-                <br />
+                </a> <br />
                 {blog.likes} likes <button onClick={this.props.like}>like</button>{" "}
                 <br />
                 Added by {blog.user.name} <br />
@@ -29,7 +28,7 @@ class Blog extends React.Component {
     collapsedBlog = () => {
         const blog = this.props.blog
         return (
-            <div onClick={this.toggleCollapsed}>
+            <div onClick={this.toggleCollapsed} className='collapsedBlog'>
                 <i>{blog.title}</i>, by {blog.author}
             </div>
         )
@@ -49,7 +48,7 @@ class Blog extends React.Component {
         }
 
         return (
-            <div style={blogStyle}>
+            <div style={blogStyle} className='wrapper'>
                 {this.state.collapsed ? this.collapsedBlog() : this.expandedBlog()}
             </div>
         )
