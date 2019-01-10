@@ -10,7 +10,7 @@
 /osa0
 
 # production
-/build
+*/build
 
 # misc
 .DS_Store
