@@ -6,9 +6,9 @@ const Anecdote = ({ anecdote, clickHandler }) => (
     <div>
         <div>
             <i>{anecdote.text}</i> <br />
-            {"Has " + anecdote.votes + " votes"}
+            {'Has ' + anecdote.votes + ' votes'}
         </div>
-        <Button label="Vote" handleClick={clickHandler} />
+        <Button label='Vote' handleClick={clickHandler} />
     </div>
 )
 

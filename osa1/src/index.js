@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-import { anecdoteReducer, initialState } from './reducer'
+import anecdoteReducer, { initialState, likeAnecdote, anecdoteCreation } from './reducers/anecdoteReducer'
 import Anecdote from './components/Anecdote'
 import AnecdoteForm from './components/AnecdoteForm'
 import './index.css'
@@ -13,22 +13,13 @@ class App extends React.Component {
     }
 
     likeAnecdote = (id) => () => {
-        store.dispatch({
-            type: 'LIKE',
-            data: { id }
-        })
+        store.dispatch(likeAnecdote(id))
     }
 
     createAnecdote = (event) => {
         event.preventDefault()
-        store.dispatch({
-            type: 'NEW',
-            data: {
-                anecdote: {
-                    text: event.target.anecdote.value
-                }
-            }
-        })
+        store.dispatch(anecdoteCreation(event.target.anecdote.value))
+        event.target.anecdote.value = ''
     }
 
     findMostVoted = () => {
@@ -39,7 +30,7 @@ class App extends React.Component {
         return (
             <div>
                 {store.getState()
-                    .sort((a,b) => b.votes - a.votes)
+                    .sort((a, b) => b.votes - a.votes)
                     .map(a =>
                         <Anecdote
                             anecdote={a}
@@ -47,7 +38,7 @@ class App extends React.Component {
                             key={a.id}
                         />
                     )}
-                    <AnecdoteForm newAnecdote={this.createAnecdote}/>
+                <AnecdoteForm newAnecdote={this.createAnecdote} />
             </div>
         )
     }
