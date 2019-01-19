@@ -1,3 +1,5 @@
+import store from '../store'
+
 const notificationReducer = (state = '', action) => {
     switch(action.type) {
         case 'ADD_NOTIFICATION': {
@@ -24,7 +26,7 @@ const clearNotification = () => {
     }
 }
 
-const addNotification = (message, timeout, store) => {
+const addNotification = (message, timeout) => {
     store.dispatch(notificationCreation(message))
     setTimeout(() => store.dispatch(clearNotification()), timeout * 1000)
 }

@@ -1,7 +1,8 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { setFilter } from '../reducers/visibilityFilter'
 
-const AnecdoteFilter = ({ store }) => {
+const AnecdoteFilter = ({ setFilter }) => {
     const style = {
         marginBottom: 10
     }
@@ -11,10 +12,13 @@ const AnecdoteFilter = ({ store }) => {
             Filter {' '}
             <input
                 placeholder='Filter'
-                onChange={(event) => store.dispatch(setFilter(event.target.value))}
+                onChange={(event) => setFilter(event.target.value)}
             />
         </div>
     )
 }
 
-export default AnecdoteFilter
+export default connect(
+    null,
+    { setFilter }
+)(AnecdoteFilter)

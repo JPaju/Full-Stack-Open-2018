@@ -1,6 +1,5 @@
 const anecdoteReducer = (state = initialState, action) => {
 
-
     switch (action.type) {
         case 'LIKE_ANECDOTE': {
             const id = action.data.id

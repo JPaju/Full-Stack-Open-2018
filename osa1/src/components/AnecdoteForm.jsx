@@ -1,19 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { addNotification } from '../reducers/notification'
 import { anecdoteCreation } from '../reducers/anecdotes'
 
 class AnecdoteForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.store = this.props.store
-    }
 
     newAnecdote = (event) => {
         event.preventDefault()
         const anecdote = event.target.anecdote.value
         event.target.anecdote.value = ''
 
-        this.store.dispatch(anecdoteCreation(anecdote))
+        this.props.anecdoteCreation(anecdote)
         addNotification(`Created anecdote '${anecdote}'`, 5, this.store)
     }
 
@@ -30,4 +27,8 @@ class AnecdoteForm extends React.Component {
     }
 }
 
-export default AnecdoteForm
+
+export default connect(
+    null,
+    { anecdoteCreation }
+)(AnecdoteForm)
