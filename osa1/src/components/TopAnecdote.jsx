@@ -1,11 +1,14 @@
 import React from 'react'
+import Anecdote from './Anecdote'
 
 const TopAnecdote = ({ anecdote }) => (
     <div>
         <h3>Most voted anecdote</h3>
-            {anecdote.text} <br/>
-            {"Has " + anecdote.votes + " votes"}
+        <Anecdote
+            anecdote={anecdote}
+            buttonVisible={false}
+        />
     </div>
 )
 
-export default TopAnecdote 
+export default TopAnecdote

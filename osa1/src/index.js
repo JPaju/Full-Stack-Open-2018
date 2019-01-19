@@ -1,51 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-import anecdoteReducer, { initialState, likeAnecdote, anecdoteCreation } from './reducers/anecdoteReducer'
-import Anecdote from './components/Anecdote'
-import AnecdoteForm from './components/AnecdoteForm'
+import reducer from './reducers/anecdoteApp'
 import './index.css'
 
+import Notification from './components/Notification'
+import AnecdoteList from './components/AnecdoteList'
+import AnecdoteForm from './components/AnecdoteForm'
+import AnecdoteFilter from './components/AnecdoteFilter'
+
 class App extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = { anecdotes: initialState }
-    }
-
-    likeAnecdote = (id) => () => {
-        store.dispatch(likeAnecdote(id))
-    }
-
-    createAnecdote = (event) => {
-        event.preventDefault()
-        store.dispatch(anecdoteCreation(event.target.anecdote.value))
-        event.target.anecdote.value = ''
-    }
-
-    findMostVoted = () => {
-        return store.getState().reduce((max, x) => max.votes > x.votes ? max : x, { votes: -1 })
-    }
-
-    render() {
+    render = () => {
         return (
             <div>
-                {store.getState()
-                    .sort((a, b) => b.votes - a.votes)
-                    .map(a =>
-                        <Anecdote
-                            anecdote={a}
-                            clickHandler={this.likeAnecdote(a.id)}
-                            key={a.id}
-                        />
-                    )}
-                <AnecdoteForm newAnecdote={this.createAnecdote} />
+
+                <h1>Anecdotes</h1>
+
+                <AnecdoteFilter store={store} />
+                <Notification store={store} />
+                <AnecdoteList store={store} />
+                <AnecdoteForm store={store} />
             </div>
         )
     }
 }
 
 
-const store = createStore(anecdoteReducer, initialState)
+const store = createStore(reducer)
 
 const render = () => {
     ReactDOM.render(

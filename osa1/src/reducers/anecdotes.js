@@ -1,12 +1,14 @@
-const anecdoteReducer = (state, action) => {
+const anecdoteReducer = (state = initialState, action) => {
+
+
     switch (action.type) {
-        case 'LIKE': {
+        case 'LIKE_ANECDOTE': {
             const id = action.data.id
             const anecdoteToLike = state.find(a => a.id === id)
             const likedAnecdote = { ...anecdoteToLike, votes: anecdoteToLike.votes + 1 }
             return state.map(a => a.id === id ? likedAnecdote : a)
         }
-        case 'NEW': {
+        case 'NEW_ANECDOTE': {
             return state.concat({ ...action.data.anecdote, votes: 0, id: state.length + 1 })
         }
         default: {
@@ -17,14 +19,14 @@ const anecdoteReducer = (state, action) => {
 
 const likeAnecdote = (id) => {
     return {
-        type: 'LIKE',
+        type: 'LIKE_ANECDOTE',
         data: { id }
     }
 }
 
 const anecdoteCreation = (text) => {
     return {
-        type: 'NEW',
+        type: 'NEW_ANECDOTE',
         data: {
             anecdote: { text }
         }
