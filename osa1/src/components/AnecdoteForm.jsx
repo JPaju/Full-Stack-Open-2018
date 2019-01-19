@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { anecdoteCreation } from '../reducers/anecdotes'
-import { notify } from '../reducers/notification';
+import { notify } from '../reducers/notification'
 
 
 class AnecdoteForm extends React.Component {
