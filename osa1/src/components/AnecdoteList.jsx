@@ -1,31 +1,40 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { anecdoteModifying } from '../reducers/anecdotes'
+import { notify } from '../reducers/notification'
 import Anecdote from './Anecdote'
-import { likeAnecdote } from '../reducers/anecdotes'
-import { addNotification } from '../reducers/notification'
 import TopAnecdote from './TopAnecdote'
 
-const AnecdoteList = ({
-    visibleAnecdotes,
-    topAnecdote,
-    likeAnecdote
-}) => {
-    return (
-        <div>
-            {visibleAnecdotes.map(a =>
-                <Anecdote
-                    anecdote={a}
-                    clickHandler={() => {
-                        likeAnecdote(a.id)
-                        addNotification(`You voted '${a.text}'`, 3)
-                    }}
-                    key={a.id}
-                />
-            )}
+class AnecdoteList extends React.Component {
 
-            <TopAnecdote anecdote={topAnecdote} />
-        </div>
-    )
+    likeAnecdote = (anecdote) => async () => {
+        this.props.notify(`You voted '${anecdote.content}'`, 3)
+        this.props.anecdoteModifying({ ...anecdote, votes: ++anecdote.votes })
+    }
+
+    render = () => {
+        const {
+            visibleAnecdotes,
+            topAnecdote
+        } = this.props
+
+        return (
+            <div>
+                {visibleAnecdotes
+                    .sort((a, b) => b.votes - a.votes)
+                    .map(a =>
+                        <Anecdote
+                            anecdote={a}
+                            clickHandler={this.likeAnecdote(a)}
+                            key={a.id}
+                        />
+                    )}
+
+                {topAnecdote && <TopAnecdote anecdote={topAnecdote} />}
+            </div>
+        )
+
+    }
 }
 
 const getVisibleAnecdotes = (anecdotes, filter) => {
@@ -33,14 +42,15 @@ const getVisibleAnecdotes = (anecdotes, filter) => {
         anecdotes :
         anecdotes
             .filter(a =>
-                a.text.toLowerCase()
+                a.content.toLowerCase()
                     .includes(filter.toLowerCase()))
 }
 
 const findMostVoted = (anecdotes) => {
-    return anecdotes.reduce((max, x) =>
-        max.votes > x.votes ? max : x, { votes: -1 }
+    const a = anecdotes.reduce((max, x) =>
+        (max.votes > x.votes ? max : x), { votes: -1 }
     )
+    return (a.votes > 0) ? a : undefined
 }
 
 const mapStateToProps = (state) => {
@@ -50,9 +60,14 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = {
+    anecdoteModifying,
+    notify
+}
+
 
 export default connect(
     mapStateToProps,
-    { likeAnecdote }
+    mapDispatchToProps
 )(AnecdoteList)
 

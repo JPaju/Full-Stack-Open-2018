@@ -1,7 +1,7 @@
 import store from '../store'
 
 const notificationReducer = (state = '', action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'ADD_NOTIFICATION': {
             return action.message
         }
@@ -26,10 +26,12 @@ const clearNotification = () => {
     }
 }
 
-const addNotification = (message, timeout) => {
-    store.dispatch(notificationCreation(message))
-    setTimeout(() => store.dispatch(clearNotification()), timeout * 1000)
+const notify = (message, timeout) => {
+    return async (dispatch) => {
+        dispatch(notificationCreation(message))
+        setTimeout(() => store.dispatch(clearNotification()), timeout * 1000)
+    }
 }
 
 export default notificationReducer
-export { notificationCreation, clearNotification, addNotification }
+export { notificationCreation, clearNotification, notify }

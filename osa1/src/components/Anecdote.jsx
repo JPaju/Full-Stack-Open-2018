@@ -13,7 +13,7 @@ const Anecdote = ({ anecdote, clickHandler, buttonVisible = true }) => {
 
         < div style={style} >
             <div>
-                <i>{anecdote.text}</i> <br />
+                <i>{anecdote.content}</i> <br />
                 {'Has ' + anecdote.votes + ' votes'}
             </div>
             <div style={{ display: buttonVisible ? 'block' : 'none' }}>

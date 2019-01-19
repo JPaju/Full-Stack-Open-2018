@@ -1,4 +1,7 @@
-const anecdoteReducer = (state = initialState, action) => {
+import { getAll, modify, create } from '../services/anecdoteService'
+
+
+const anecdoteReducer = (state = [], action) => {
 
     switch (action.type) {
         case 'LIKE_ANECDOTE': {
@@ -8,7 +11,14 @@ const anecdoteReducer = (state = initialState, action) => {
             return state.map(a => a.id === id ? likedAnecdote : a)
         }
         case 'NEW_ANECDOTE': {
-            return state.concat({ ...action.data.anecdote, votes: 0, id: state.length + 1 })
+            return state.concat({ ...action.data })
+        }
+        case 'MODIFY_ANECDOTE': {
+            const { id } = action.data
+            return state.map(a => a.id === id ? action.data : a)
+        }
+        case 'INIT_ANECDOTES': {
+            return action.anecdotes
         }
         default: {
             return state
@@ -16,54 +26,36 @@ const anecdoteReducer = (state = initialState, action) => {
     }
 }
 
-const likeAnecdote = (id) => {
-    return {
-        type: 'LIKE_ANECDOTE',
-        data: { id }
+
+const anecdoteCreation = (content) => {
+    return async (dispatch) => {
+        const response = await create(content)
+        dispatch({
+            type: 'NEW_ANECDOTE',
+            data: response
+        })
     }
 }
 
-const anecdoteCreation = (text) => {
-    return {
-        type: 'NEW_ANECDOTE',
-        data: {
-            anecdote: { text }
-        }
+const anecdoteModifying = (modifiedAnecdote) => {
+    return async (dispatch) => {
+        const response = await modify(modifiedAnecdote)
+        dispatch({
+            type: 'MODIFY_ANECDOTE',
+            data: response
+        })
     }
 }
 
-const initialState = [
-    {
-        text: 'If it hurts, do it more often',
-        votes: 0,
-        id: 1
-    },
-    {
-        text: 'Adding manpower to a late software project makes it later!',
-        votes: 0,
-        id: 2
-    },
-    {
-        text: 'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-        votes: 0,
-        id: 3
-    },
-    {
-        text: 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-        votes: 0,
-        id: 4
-    },
-    {
-        text: 'Premature optimization is the root of all evil.',
-        votes: 0,
-        id: 5
-    },
-    {
-        text: 'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-        votes: 0,
-        id: 6
+const anecdoteInitalization = () => {
+    return async (dispatch) => {
+        const anecdotes = await getAll()
+        dispatch({
+            type: 'INIT_ANECDOTES',
+            anecdotes
+        })
     }
-]
+}
 
 export default anecdoteReducer
-export { initialState, likeAnecdote, anecdoteCreation }
+export { anecdoteCreation, anecdoteModifying, anecdoteInitalization }
